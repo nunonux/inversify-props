@@ -1,10 +1,15 @@
 import { Container } from './lib/container';
-import { DependencyId, Inject, inject, injectable, mockInject, mockRequest, mockSingleton, mockTransient, resetContainer } from './lib/helpers';
+import { DependencyId, Inject, inject, injectable } from './lib/helpers';
+import { mockInject, mockRequest, mockSingleton, mockTransient, resetContainer } from './lib/mocks';
+import { buildProviderModule } from 'inversify-binding-decorators';
 
 // How to inject a dependency
 // @Inject() nameService: INameService;
 
 export const container: Container = new Container();
+export const build = () => {
+    container.load(buildProviderModule());
+}
 
 const cid = DependencyId;
 

@@ -1,6 +1,6 @@
 {
-  "name": "inversify-props",
-  "version": "1.4.9",
+  "name": "nmbg-inversify-props",
+  "version": "1.4.91",
   "description": "Wrapper to use inversify as property decorator with TypeScript, useful for component libraries like Vue, React or LitElement",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,8 +12,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CKGrafico/inversify-props.git"
+    "url": "git+https://github.com/nunonux/inversify-props.git"
   },
+  "MODULE": "https://github.com/nunonux/inversify-props.git/tarball/f461556d002fc807e613bc93c11ef2e146b21117",
   "keywords": [
     "inversify",
     "typescript",

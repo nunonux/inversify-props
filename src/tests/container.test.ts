@@ -30,17 +30,18 @@ class ExampleConsumer2 {
   exampleService: ExampleService2;
 }
 
-const cont = ContainerBuilder(container);
+ContainerBuilder(container);
 
 describe('Container', () => {
 
   beforeEach(() => {
-    
+    const container2 = new Container()
+    ContainerBuilder(container2);
   });
 
   describe('When using provider decorator', () => {
     test('It should have dependency ExampleService', () => {
-      const okId = 'ExampleService';
+      const okId = Symbol.for('ExampleService');
       const badId = 'example';
       expect(() => container.get(okId)).not.toThrow();
       expect(() => container.get(badId)).toThrow();
@@ -51,7 +52,7 @@ describe('Container', () => {
     })
 
     test('It should have dependency ExampleService2 with id randomServ2', () => {
-      const okId = 'randomServ2';
+      const okId = Symbol.for('randomServ2');
       const badId = 'example';
       expect(() => container.get(okId)).not.toThrow();
       expect(() => container.get(badId)).toThrow();
@@ -66,7 +67,7 @@ describe('Container', () => {
     test('if has no id should create random id', () => {
       //container.addTransient<ExampleService>(ExampleService);
 
-      const okId = 'ExampleService';
+      const okId = Symbol.for('ExampleService');
       const badId = 'example';
 
       expect(() => container.get<ExampleService>(okId)).not.toThrow();
@@ -74,7 +75,7 @@ describe('Container', () => {
     });
 
     test('if has id should use the id', () => {
-      const id = 'randomId1';
+      const id = Symbol.for('randomId1');
       container.addTransient<ExampleService>(ExampleService, id);
 
       const okId = id;
@@ -89,7 +90,7 @@ describe('Container', () => {
     test('if has no id should create random id', () => {
       //container.addSingleton<ExampleService>(ExampleService);
 
-      const okId = 'ExampleService';
+      const okId = Symbol.for('ExampleService');
       const badId = 'example';
 
       expect(() => container.get<ExampleService>(okId)).not.toThrow();
@@ -97,7 +98,7 @@ describe('Container', () => {
     });
 
     test('if has id should use the id', () => {
-      const id = 'randomId2';
+      const id = Symbol.for('randomId2');
       container.addSingleton<ExampleService>(ExampleService, id);
 
       const okId = id;
@@ -112,7 +113,7 @@ describe('Container', () => {
     test('if has no id should create random id', () => {
       //container.addRequest<ExampleService>(ExampleService);
 
-      const okId = 'ExampleService';
+      const okId = Symbol.for('ExampleService');
       const badId = 'example';
 
       expect(() => container.get<ExampleService>(okId)).not.toThrow();
@@ -120,7 +121,7 @@ describe('Container', () => {
     });
 
     test('if has id should use the id', () => {
-      const id = 'randomId3';
+      const id = Symbol.for('randomId3');
       container.addRequest<ExampleService>(ExampleService, id);
 
       const okId = id;

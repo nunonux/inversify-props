@@ -92,8 +92,7 @@ export function injectable(customId?: string) {
 
 export function provide(customId?: string, injectType: InjectTypes = InjectTypes.Singleton, force: boolean = false) {
   return function (target: any) {
-    cacheId(customId, injectId(target));
-    const targetName = target instanceof Function ? target.name : target.toString();
+    const targetName = cacheId(customId, injectId(target));
     switch(injectType) {
       case InjectTypes.Singleton:
         return __provide(targetName, force)(target);

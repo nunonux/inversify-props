@@ -19,11 +19,14 @@ export let DependencyId: { [key: string]: string | symbol; } = {};
 
 export function cacheId(customId: string | symbol, id: string): string | symbol {
   if (customId) {
-    DependencyId[customId.toString()] = customId;
-    return customId;
+    const typeofcu = typeof customId;
+    const isNotSymbol = typeofcu === 'string';
+    const result = isNotSymbol ? Symbol.for(customId.toString()) :customId;
+    DependencyId[customId.toString()] = result;
+    return result;
   }
 
-  DependencyId[id] = DependencyId[id] || id;
+  DependencyId[id] = DependencyId[id] || Symbol.for(id);
   return DependencyId[id];
 }
 

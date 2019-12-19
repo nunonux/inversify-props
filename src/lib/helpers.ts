@@ -1,5 +1,7 @@
 import { inject as __inject, injectable as __injectable } from 'inversify';
+import { provide as __provide } from 'inversify-binding-decorators';
 import { cid, container } from '..';
+import { InjectTypes } from './enums';
 /**
  * @param key the name of the property,
  * If the interface is IMyService the key must be myService or _myService
@@ -9,7 +11,7 @@ const keyToId = (key: string) => {
     throw new Error('A key is necessary to load this interface');
   }
 
-  const prefix = 'I' + key[0].toUpperCase();
+  const prefix = '' + key[0].toUpperCase();
   return prefix + key.slice(1).replace('_', '');
 };
 
@@ -79,73 +81,28 @@ export function injectId(target: any): string {
 }
 
 /**
- * Decorator to inject dependencies for testing purposes
- * @param target: the component
- * @param key: the injected class
- * @param mock: the object mock
- * @example
- * mockInject(wrapper.vm, 'citiesService', {
- *   remove: x => x + 100000
- * })
- */
-export function mockInject(target: any, key: any, mock: any) {
-  console.log('this method is going to be deprecated soon, use mockDependency and check docs.');
-
-  const getter = () => {
-    return mock;
-  };
-
-  Reflect.deleteProperty[key];
-  Reflect.defineProperty(target, key, {
-    get: getter,
-    set: x => x
-  });
-}
-
-/**
  * Help Injectable to cache id if necessary
  */
 export function injectable(customId?: string) {
   return function (target: any) {
-    cacheId(customId, injectId(target));
-    return __injectable()(target);
+      cacheId(customId, injectId(target));
+      return __injectable()(target);
   };
 }
 
-/**
- * Unbind all dependencies from container
- */
-export function resetContainer() {
-  container.unbindAll();
+export function provide(customId?: string, injectType: InjectTypes = InjectTypes.Singleton, force: boolean = false) {
+  return function (target: any) {
+    cacheId(customId, injectId(target));
+    switch(injectType) {
+      case InjectTypes.Singleton:
+        return __provide(target, force)(target).inSingletonScope().done();
+      case InjectTypes.Transient:
+        return __provide(target, force)(target);
+      default:
+        return __provide(target, force)(target).inSingletonScope().done();
+    }
+  };
 }
 
-/**
- * After container is generated, mock an existing dependency as Singleton
- */
-export function mockSingleton<T>(id: string | symbol, to: {
-  new (...args: any[]): T;
-}) {
-  container.unbind(id);
-  container.addSingleton<T>(to, id);
-}
 
-/**
- * After container is generated, mock an existing dependency as Transient
- */
-export function mockTransient<T>(id: string | symbol, to: {
-  new (...args: any[]): T;
-}) {
-  container.unbind(id);
-  container.addTransient<T>(to, id);
-}
-
-/**
- * After container is generated, mock an existing dependency as Request
- */
-export function mockRequest<T>(id: string | symbol, to: {
-  new (...args: any[]): T;
-}) {
-  container.unbind(id);
-  container.addRequest<T>(to, id);
-}
 

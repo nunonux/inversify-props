@@ -1,13 +1,15 @@
 {
   "name": "nmbg-inversify-props",
-  "version": "1.4.91",
+  "version": "1.4.93",
   "description": "Wrapper to use inversify as property decorator with TypeScript, useful for component libraries like Vue, React or LitElement",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Quique Fdez Guerra",
   "scripts": {
     "build": "tsc -p src --outDir dist",
-    "test": "jest"
+    "test": "jest",
+    "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
+    "test:watch": "node --inspect node_modules/.bin/jest --watch"
   },
   "license": "MIT",
   "repository": {
@@ -30,6 +32,7 @@
   "dependencies": {
     "inversify": "^5.0.1",
     "inversify-binding-decorators": "^4.0.0",
+    "reflect-metadata": "^0.1.13",
     "typescript": "^3.5.3"
   },
   "devDependencies": {

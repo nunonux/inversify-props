@@ -1,6 +1,6 @@
 {
   "name": "nmbg-inversify-props",
-  "version": "1.4.93",
+  "version": "1.4.95",
   "description": "Wrapper to use inversify as property decorator with TypeScript, useful for component libraries like Vue, React or LitElement",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

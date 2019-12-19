@@ -11,7 +11,7 @@ const keyToId = (key: string) => {
     throw new Error('A key is necessary to load this interface');
   }
 
-  const prefix = '' + key[0].toUpperCase();
+  const prefix = key[0].toUpperCase();
   return prefix + key.slice(1).replace('_', '');
 };
 
@@ -23,7 +23,7 @@ export function cacheId(customId: string | symbol, id: string): string | symbol 
     return customId;
   }
 
-  DependencyId[id] = DependencyId[id] || Symbol(id);
+  DependencyId[id] = DependencyId[id] || id;
   return DependencyId[id];
 }
 
@@ -93,13 +93,14 @@ export function injectable(customId?: string) {
 export function provide(customId?: string, injectType: InjectTypes = InjectTypes.Singleton, force: boolean = false) {
   return function (target: any) {
     cacheId(customId, injectId(target));
+    const targetName = target instanceof Function ? target.name : target.toString();
     switch(injectType) {
       case InjectTypes.Singleton:
-        return __provide(target, force)(target).inSingletonScope().done();
+        return __provide(targetName, force)(target);
       case InjectTypes.Transient:
-        return __provide(target, force)(target);
+        return __provide(targetName, force)(target);
       default:
-        return __provide(target, force)(target).inSingletonScope().done();
+        return __provide(targetName, force)(target).inSingletonScope().done();
     }
   };
 }

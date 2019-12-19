@@ -1,90 +1,111 @@
-import { injectable } from '..';
+import { injectable, inject, provide, ContainerBuilder, container } from '..';
 import { Container } from '../lib/container';
+import 'reflect-metadata';
 
 interface IExampleService {
   get(): boolean;
 }
 
-@injectable()
-class ExampleService implements IExampleService {
+@provide()
+class ExampleService {
   public get(): boolean {
     return true;
   }
 }
 
-let container: Container;
+class ExampleConsumer {
+  @inject()
+  exampleService: ExampleService;
+}
+const cont = ContainerBuilder(container);
+
 describe('Container', () => {
 
   beforeEach(() => {
-    container = new Container();
+    
+  });
+
+  describe('When using provider decorator', () => {
+    test('It should have dependency ExampleService', () => {
+      const okId = 'ExampleService';
+      const badId = 'example';
+      expect(() => container.get(okId)).not.toThrow();
+      expect(() => container.get(badId)).toThrow();
+    });
+    test('Dependency should be injected', () => {
+      const exampleConsumer = new ExampleConsumer();
+      const kika = typeof exampleConsumer.exampleService;
+      const kiko = exampleConsumer.exampleService;
+      expect(() => exampleConsumer.exampleService).not.toBeInstanceOf(Error);
+    })
   });
 
   describe('When addTransient', () => {
     test('if has no id should create random id', () => {
-      container.addTransient<IExampleService>(ExampleService);
+      //container.addTransient<ExampleService>(ExampleService);
 
-      const okId = 'IExampleService';
+      const okId = 'ExampleService';
       const badId = 'example';
 
-      expect(() => container.get<IExampleService>(okId)).not.toThrow();
-      expect(() => container.get<IExampleService>(badId)).toThrow();
+      expect(() => container.get<ExampleService>(okId)).not.toThrow();
+      expect(() => container.get<ExampleService>(badId)).toThrow();
     });
 
     test('if has id should use the id', () => {
-      const id = 'randomId';
-      container.addTransient<IExampleService>(ExampleService, id);
+      const id = 'randomId1';
+      container.addTransient<ExampleService>(ExampleService, id);
 
       const okId = id;
-      const badId = 'IExampleService';
+      const badId = 'ExampleService1';
 
-      expect(() => container.get<IExampleService>(okId)).not.toThrow();
-      expect(() => container.get<IExampleService>(badId)).toThrow();
+      expect(() => container.get<ExampleService>(okId)).not.toThrow();
+      expect(() => container.get<ExampleService>(badId)).toThrow();
     });
   });
 
   describe('When addSingleton', () => {
     test('if has no id should create random id', () => {
-      container.addSingleton<IExampleService>(ExampleService);
+      //container.addSingleton<ExampleService>(ExampleService);
 
-      const okId = 'IExampleService';
+      const okId = 'ExampleService';
       const badId = 'example';
 
-      expect(() => container.get<IExampleService>(okId)).not.toThrow();
-      expect(() => container.get<IExampleService>(badId)).toThrow();
+      expect(() => container.get<ExampleService>(okId)).not.toThrow();
+      expect(() => container.get<ExampleService>(badId)).toThrow();
     });
 
     test('if has id should use the id', () => {
-      const id = 'randomId';
-      container.addSingleton<IExampleService>(ExampleService, id);
+      const id = 'randomId2';
+      container.addSingleton<ExampleService>(ExampleService, id);
 
       const okId = id;
-      const badId = 'IExampleService';
+      const badId = 'ExampleService2';
 
-      expect(() => container.get<IExampleService>(okId)).not.toThrow();
-      expect(() => container.get<IExampleService>(badId)).toThrow();
+      expect(() => container.get<ExampleService>(okId)).not.toThrow();
+      expect(() => container.get<ExampleService>(badId)).toThrow();
     });
   });
 
   describe('When addRequest', () => {
     test('if has no id should create random id', () => {
-      container.addRequest<IExampleService>(ExampleService);
+      //container.addRequest<ExampleService>(ExampleService);
 
-      const okId = 'IExampleService';
+      const okId = 'ExampleService';
       const badId = 'example';
 
-      expect(() => container.get<IExampleService>(okId)).not.toThrow();
-      expect(() => container.get<IExampleService>(badId)).toThrow();
+      expect(() => container.get<ExampleService>(okId)).not.toThrow();
+      expect(() => container.get<ExampleService>(badId)).toThrow();
     });
 
     test('if has id should use the id', () => {
-      const id = 'randomId';
-      container.addRequest<IExampleService>(ExampleService, id);
+      const id = 'randomId3';
+      container.addRequest<ExampleService>(ExampleService, id);
 
       const okId = id;
-      const badId = 'IExampleService';
+      const badId = 'ExampleService3';
 
-      expect(() => container.get<IExampleService>(okId)).not.toThrow();
-      expect(() => container.get<IExampleService>(badId)).toThrow();
+      expect(() => container.get<ExampleService>(okId)).not.toThrow();
+      expect(() => container.get<ExampleService>(badId)).toThrow();
     });
   });
 });

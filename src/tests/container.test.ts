@@ -13,10 +13,23 @@ class ExampleService {
   }
 }
 
+@provide('randomServ2')
+class ExampleService2 {
+  public get(): boolean {
+    return true;
+  }
+}
+
 class ExampleConsumer {
   @inject()
   exampleService: ExampleService;
 }
+
+class ExampleConsumer2 {
+  @inject('randomServ2')
+  exampleService: ExampleService2;
+}
+
 const cont = ContainerBuilder(container);
 
 describe('Container', () => {
@@ -34,8 +47,17 @@ describe('Container', () => {
     });
     test('Dependency should be injected', () => {
       const exampleConsumer = new ExampleConsumer();
-      const kika = typeof exampleConsumer.exampleService;
-      const kiko = exampleConsumer.exampleService;
+      expect(() => exampleConsumer.exampleService).not.toBeInstanceOf(Error);
+    })
+
+    test('It should have dependency ExampleService2 with id randomServ2', () => {
+      const okId = 'randomServ2';
+      const badId = 'example';
+      expect(() => container.get(okId)).not.toThrow();
+      expect(() => container.get(badId)).toThrow();
+    });
+    test('Dependency with id randomServ2 should be injected', () => {
+      const exampleConsumer = new ExampleConsumer2();
       expect(() => exampleConsumer.exampleService).not.toBeInstanceOf(Error);
     })
   });
